@@ -1,0 +1,22 @@
+@use "./variables" as *;
+
+.header {
+  background: rgba($color-white, 0.95);
+  padding: 20px;
+  text-align: center;
+  border-bottom: 3px solid #667eea;
+}
+
+.header h1 {
+  color: #333;
+  font-size: 24px;
+  margin-bottom: 8px;
+}
+
+.subtitle {
+  color: #666;
+  font-size: 12px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}

@@ -1,0 +1,7 @@
+// Main SCSS entry point - Using @use (modern SCSS)
+@use './styles/variables' as *;
+@use './styles/base';
+@use './styles/settings';
+@use './styles/toggle';
+@use './styles/features';
+@use './styles/header';

@@ -1,0 +1,64 @@
+// Variables
+$primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+$success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+$facebook-gradient: linear-gradient(135deg, #1877f2 0%, #0d5dbf 100%);
+$instagram-gradient: linear-gradient(135deg, #e1306c 0%, #fd1d1d 50%, #f77737 100%);
+
+// Colors
+$color-white: #fff;
+$color-success: #10b981;
+$color-success-dark: #059669;
+$color-success-darker: #047857;
+$color-warning: #f59e0b;
+$color-accent: #fbbf24;
+
+// Spacing
+$spacing-xs: 4px;
+$spacing-sm: 8px;
+$spacing-md: 12px;
+$spacing-lg: 16px;
+$spacing-xl: 20px;
+
+// Sizes
+$popup-width: 380px;
+$popup-min-height: 500px;
+
+// Border Radius
+$border-radius-sm: 8px;
+$border-radius-md: 10px;
+$border-radius-lg: 12px;
+$border-radius-xl: 20px;
+$border-radius-full: 50%;
+
+// Transitions
+$transition-fast: 0.3s ease;
+
+// Font
+$font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+// Mixins
+@mixin flex-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+@mixin card-hover {
+  transition: all $transition-fast;
+  
+  &:hover {
+    background: rgba($color-white, 0.15);
+    transform: translateY(-2px);
+  }
+}
+
+@mixin glassmorphism($opacity: 0.1) {
+  background: rgba($color-white, $opacity);
+  backdrop-filter: blur(10px);
+}

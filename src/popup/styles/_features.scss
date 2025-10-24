@@ -1,0 +1,39 @@
+@use './variables' as *;
+
+.features-info {
+  margin-top: $spacing-xl;
+  @include glassmorphism;
+  padding: $spacing-lg;
+  border-radius: $border-radius-sm;
+
+  h4 {
+    color: $color-white;
+    font-size: 13px;
+    font-weight: 600;
+    margin: 0 0 10px 0;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  li {
+    color: rgba($color-white, 0.9);
+    font-size: 12px;
+    padding: 6px 0;
+    border-bottom: 1px solid rgba($color-white, 0.1);
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &.no-features {
+      color: rgba($color-white, 0.6);
+      font-style: italic;
+      text-align: center;
+      padding: 10px 0;
+    }
+  }
+}

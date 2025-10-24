@@ -63,9 +63,9 @@ function App() {
 
   return (
     <div className="app">
+      <Header />
       <div className="content">
         <div className="settings-section">
-          <Header />
           <h3 className="section-title">Nền tảng hỗ trợ</h3>
           <div className="setting-item">
             <div className="setting-info">

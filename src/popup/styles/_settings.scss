@@ -1,0 +1,70 @@
+@use './variables' as *;
+
+.settings-section {
+  margin: $spacing-xl 0;
+}
+
+.section-title {
+  color: $color-white;
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: $spacing-md;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.setting-item {
+  @include glassmorphism;
+  @include flex-between;
+  @include card-hover;
+  border-radius: $border-radius-lg;
+  padding: $spacing-lg;
+  margin-bottom: $spacing-md;
+}
+
+.setting-info {
+  display: flex;
+  align-items: center;
+  gap: $spacing-md;
+  flex: 1;
+}
+
+.platform-icon {
+  @include flex-center;
+  width: 40px;
+  height: 40px;
+  border-radius: $border-radius-md;
+  font-weight: bold;
+  font-size: 20px;
+  color: $color-white;
+  flex-shrink: 0;
+}
+
+.facebook-icon {
+  background: $facebook-gradient;
+}
+
+.instagram-icon {
+  background: $instagram-gradient;
+  font-size: 24px;
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.setting-text {
+  h4 {
+    color: $color-white;
+    font-size: 15px;
+    font-weight: 600;
+    margin: 0 0 4px 0;
+  }
+
+  p {
+    color: rgba($color-white, 0.8);
+    font-size: 12px;
+    margin: 0;
+  }
+}
