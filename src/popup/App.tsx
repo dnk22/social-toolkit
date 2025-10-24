@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { ProductEnabledStorageKeys, Products } from "../utils/constants";
+import Header from "./components/Header";
 
 interface Settings {
   facebook: boolean;
@@ -15,11 +16,15 @@ function App() {
   useEffect(() => {
     // Load saved settings from storage
     chrome.storage.local.get(
-      [ProductEnabledStorageKeys.FACEBOOK_ENABLED, ProductEnabledStorageKeys.INSTAGRAM_ENABLED],
+      [
+        ProductEnabledStorageKeys.FACEBOOK_ENABLED,
+        ProductEnabledStorageKeys.INSTAGRAM_ENABLED,
+      ],
       (result) => {
         setSettings({
           facebook: result[ProductEnabledStorageKeys.FACEBOOK_ENABLED] || false,
-          instagram: result[ProductEnabledStorageKeys.INSTAGRAM_ENABLED] || false,
+          instagram:
+            result[ProductEnabledStorageKeys.INSTAGRAM_ENABLED] || false,
         });
       }
     );
@@ -60,6 +65,7 @@ function App() {
     <div className="app">
       <div className="content">
         <div className="settings-section">
+          <Header />
           <h3 className="section-title">Nền tảng hỗ trợ</h3>
           <div className="setting-item">
             <div className="setting-info">
