@@ -1,6 +1,7 @@
-import { initReelsFeature } from "./features/instagram/reels";
 // import { initTimeUsageTracker } from "./features/common/timeUsage";
 // import { Products } from "../utils/constants";
+
+import { initReelsFeature } from "./features/instagram/reels";
 
 async function setupInstagramContentScript() {
   console.log("🚀 Instagram Content Script Loaded");

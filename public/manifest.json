@@ -29,12 +29,6 @@
       "js": ["facebook.js"]
     }
   ],
-  "permissions": [
-    "storage",
-    "activeTab",
-    "scripting"
-  ],
-  "host_permissions": [
-    "*://*/*"
-  ]
+  "permissions": ["storage", "activeTab", "scripting", "downloads"],
+  "host_permissions": ["*://*/*"]
 }
