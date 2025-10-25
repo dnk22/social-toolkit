@@ -47,16 +47,29 @@ export default defineConfig({
       input: {
         index: resolve(__dirname, 'src/popup/index.jsx'),
         background: resolve(__dirname, 'src/background/background.ts'),
-        content: resolve(__dirname, 'src/content/content.ts'),
+        instagram: resolve(__dirname, 'src/content/instagram.ts'),
+        facebook: resolve(__dirname, 'src/content/facebook.ts'),
       },
       output: {
         entryFileNames: '[name].js',
-        chunkFileNames: '[name].js',
+        chunkFileNames: 'chunks/[name]-[hash].js',
         assetFileNames: (assetInfo) => {
           if (assetInfo.name === 'popup.css') return 'popup.css';
           return '[name].[ext]';
         },
+        format: 'es',
+        // Inline all imports for content scripts
+        manualChunks(id) {
+          // Don't create separate chunks for content script dependencies
+          if (id.indexOf('src/content') > -1 || 
+              id.indexOf('src/utils') > -1 ||
+              id.indexOf('features/common') > -1 ||
+              id.indexOf('features/instagram') > -1) {
+            return null; // Bundle into the entry file
+          }
+        },
       },
     },
+    minify: false,
   },
 });

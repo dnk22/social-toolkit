@@ -1,152 +1,255 @@
 # Social Toolkit - Chrome Extension
 
-A modern Chrome extension built with **React**, **TypeScript**, and **Vite** for fast development and optimal performance.
+A modern Chrome extension built with **React**, **TypeScript**, **SCSS**, and **Vite** for social media platforms (Instagram, Facebook).
 
-## 🚀 Features
+## ⚠️ Important: Node.js Setup
 
-- ⚛️ **React 18** - Modern React with hooks
-- 📘 **TypeScript** - Full type safety
-- ⚡ **Vite** - Lightning fast HMR and builds
-- 🎨 **Modern UI** - Beautiful gradient design
-- 💾 **Chrome Storage API** - Persistent data storage
-- 📨 **Message Passing** - Communication between popup, content script, and background worker
-- 🔧 **Manifest V3** - Latest Chrome extension standard
+Project requires **Node.js 22+** via **NVM** (not Homebrew Node).
+
+### Quick Setup:
+```bash
+# Load NVM (if not auto-loaded)
+source ./load-nvm.sh
+
+# Or use wrapper scripts
+./yarn.sh build
+./npm.sh run dev
+```
+
+**See [FIX-NPM-YARN-ERROR.md](FIX-NPM-YARN-ERROR.md)** if you encounter icu4c errors.
+
+## 🚀 Quick Start
+
+### Development (với watch mode):
+```bash
+source ./load-nvm.sh  # Load NVM first
+npm run dev
+# hoặc
+./dev.sh  # NVM auto-loaded
+```
+
+### Production build:
+```bash
+source ./load-nvm.sh  # Load NVM first
+npm run build
+# hoặc
+./yarn.sh build  # Wrapper with NVM
+```
+
+### Load vào Chrome:
+1. Mở `chrome://extensions/`
+2. Bật "Developer mode"
+3. Click "Load unpacked"
+4. Chọn thư mục `dist/`
+
+## ✨ Features
+
+### ⏰ Time Usage Tracker
+- Đếm thời gian sử dụng real-time cho từng platform
+- Hiển thị timer góc trên phải: `📸 Time: 00:15:32`
+- Lưu data theo ngày vào Chrome Storage
+- Reset tự động mỗi ngày mới
+
+### 🎬 Instagram Reels Support
+- Detect Reels pages tự động
+- Visual indicator khi active
+- Sẵn sàng cho features (download, auto-play, etc.)
+
+### 🎨 Modern UI
+- SCSS với modular structure
+- Gradient design đẹp mắt
+- Toggle switches cho từng platform
+- Responsive layout
 
 ## 📁 Project Structure
 
 ```
-Social/
-├── public/
-│   ├── manifest.json          # Extension manifest
-│   └── icons/                 # Extension icons (16, 48, 128)
+social-toolkit/
 ├── src/
-│   ├── popup/
-│   │   ├── popup.html        # Popup HTML entry
-│   │   ├── index.tsx         # React entry point (TypeScript)
-│   │   ├── App.tsx           # Main React component (TypeScript)
-│   │   └── popup.css         # Popup styles
-│   ├── content/
-│   │   └── content.ts        # Content script (TypeScript)
+│   ├── popup/                      # Extension popup
+│   │   ├── App.tsx                 # React component
+│   │   ├── index.jsx               # Entry point
+│   │   ├── popup.scss              # Main styles
+│   │   └── styles/                 # SCSS modules
+│   │       ├── _variables.scss     # Design tokens
+│   │       ├── _base.scss          # Base styles
+│   │       ├── _settings.scss      # Settings section
+│   │       ├── _toggle.scss        # Toggle switches
+│   │       └── _features.scss      # Features info
+│   ├── content/                    # Content scripts
+│   │   ├── instagram.ts            # Instagram (IIFE)
+│   │   ├── facebook.ts             # Facebook (IIFE)
+│   │   └── features/
+│   │       ├── common/
+│   │       │   └── timeUsage.ts    # Time tracker
+│   │       └── instagram/
+│   │           └── reels.ts        # Reels feature
 │   ├── background/
-│   │   └── background.ts     # Background service worker (TypeScript)
+│   │   └── background.ts           # Service worker
 │   └── utils/
-│       └── constants.ts      # Shared constants and types
-├── tsconfig.json             # TypeScript configuration
-├── package.json
-├── vite.config.ts            # Vite configuration (TypeScript)
-└── README.md
+│       └── constants.ts            # Enums & types
+├── public/
+│   ├── manifest.json               # Extension manifest
+│   └── icons/
+├── dist/                           # Build output
+├── build-content.js                # IIFE builder
+├── dev.sh                          # Dev script
+└── vite.config.ts                  # Vite config
 ```
 
-## 🛠️ Setup & Development
+## 🛠️ Development
 
-### 1. Install Dependencies
+### Scripts
 
-```bash
-npm install
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Watch mode (auto-rebuild) |
+| `npm run build` | Production build |
+| `npm run build:main` | Build popup & background |
+| `npm run build:content` | Build content scripts (IIFE) |
+| `npm run load` | Show extension load guide |
+
+### Tech Stack
+
+- ⚛️ **React 18** - Modern React with hooks
+- 📘 **TypeScript** - Full type safety
+- ⚡ **Vite** - Lightning fast builds
+- 🎨 **SCSS** - Modular styles with variables & mixins
+- 🔧 **Manifest V3** - Latest Chrome extension standard
+
+## 🧪 Testing
+
+### Instagram:
+```
+https://www.instagram.com/
+→ Thấy timer: 📸 Time: 00:00:01 (góc trên phải)
 ```
 
-### 2. Build the Extension
-
-For development (with watch mode):
-```bash
-npm run dev
+### Facebook:
+```
+https://www.facebook.com/
+→ Thấy timer: 👥 Time: 00:00:01
 ```
 
-For production:
-```bash
-npm run build
+### Instagram Reels:
+```
+https://www.instagram.com/reels/
+→ Thấy badge: 🎬 Instagram Reels Toolkit Active
+→ Và timer: 📸 Time: 00:00:01
 ```
 
-The built extension will be in the `dist/` folder.
+### Check Data:
+```javascript
+// Mở Console (F12)
+chrome.storage.local.get(null, console.log);
 
-### 3. Load Extension in Chrome
-
-1. Open Chrome and go to `chrome://extensions/`
-2. Enable **Developer mode** (toggle in top-right corner)
-3. Click **Load unpacked**
-4. Select the `dist/` folder from this project
-5. The extension icon should appear in your toolbar! 🎉
-
-### 4. Development Workflow
-
-1. Run `npm run dev` to start watch mode
-2. Make changes to your code
-3. Go to `chrome://extensions/` and click the **reload** icon on your extension
-4. Test your changes
-
-## 📝 How It Works
-
-### Popup (React UI)
-- Built with React components
-- Uses Chrome Storage API to persist data
-- Sends messages to content script when button is clicked
-
-### Content Script
-- Runs on all web pages
-- Listens for messages from popup
-- Creates floating notifications on the page
-
-### Background Service Worker
-- Runs in the background
-- Handles extension lifecycle events
-- Creates context menu items
-- Monitors tab updates
-
-## 🎨 Customization
-
-### Change Extension Name/Description
-Edit `public/manifest.json`:
-```json
+// Output:
 {
-  "name": "Your Extension Name",
-  "description": "Your description"
+  timeUsage_instagram_today: {
+    date: "2025-10-25",
+    totalSeconds: 932,
+    ...
+  }
 }
 ```
 
-### Add New Features
-1. Update popup UI in `src/popup/App.tsx`
-2. Add content script logic in `src/content/content.ts`
-3. Add background tasks in `src/background/background.ts`
+## 🐛 Troubleshooting
 
-### Styling
-Modify `src/popup/popup.css` for the popup interface design.
+### "Cannot use import statement outside a module"
+✅ **Fixed!** Content scripts được build thành IIFE format.
 
-### TypeScript
-All files are in TypeScript for type safety:
-- Use interfaces and types for better code quality
-- Chrome API types are fully supported
-- Run `npx tsc --noEmit` to check types
+**Verify:**
+```bash
+head -1 dist/instagram.js
+# Phải thấy: (function() {
+```
 
-## 📦 Building for Distribution
+### Timer không hiển thị
+- Reload extension trong `chrome://extensions/`
+- Check Console cho errors
+- Verify permissions trong manifest.json
 
-1. Update version in `public/manifest.json`
-2. Run `npm run build`
-3. Zip the `dist/` folder
-4. Upload to Chrome Web Store
-
-## 🔧 Technologies
-
-- React 18.2.0
-- TypeScript 5.4.2
-- Vite 5.1.0
-- Chrome Extension Manifest V3
+### Dev mode không watch
+```bash
+# Restart
+pkill -f "vite|build-content"
+npm run dev
+```
 
 ## 📚 Documentation
 
-- `TYPESCRIPT-MIGRATION.md` - TypeScript migration guide
-- `TYPESCRIPT-DONE.md` - TypeScript conversion summary
-- `HUONG-DAN.md` - Vietnamese guide
-- `QUICKSTART.md` - Quick start guide
+- [TIME-USAGE-TRACKER.md](TIME-USAGE-TRACKER.md) - Time tracker chi tiết
+- [DEV-WORKFLOW.md](DEV-WORKFLOW.md) - Development workflow
+- [FIX-ES-MODULE-ERROR.md](FIX-ES-MODULE-ERROR.md) - ES module fix
+- [SCSS-MIGRATION.md](SCSS-MIGRATION.md) - SCSS setup guide
+
+## 🎨 SCSS Customization
+
+### Colors:
+```scss
+// src/popup/styles/_variables.scss
+$primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+$color-success: #10b981;
+```
+
+### Mixins:
+```scss
+@use './variables' as *;
+
+.my-component {
+  @include flex-center;
+  @include glassmorphism;
+}
+```
+
+## � Adding New Features
+
+### 1. Create Feature Module:
+```typescript
+// src/content/features/instagram/newFeature.ts
+export function initNewFeature() {
+  console.log('New feature initialized');
+  // Your code here
+}
+```
+
+### 2. Import vào Content Script:
+```typescript
+// src/content/instagram.ts
+import { initNewFeature } from './features/instagram/newFeature';
+
+if (condition) {
+  initNewFeature();
+}
+```
+
+### 3. Rebuild:
+```bash
+npm run build:content
+```
+
+## 📦 Build for Production
+
+```bash
+# Full production build
+npm run build
+
+# Verify output
+ls -la dist/
+
+# Test locally
+Load dist/ vào chrome://extensions/
+
+# Package
+cd dist && zip -r ../social-toolkit-v1.0.0.zip .
+```
 
 ## 📄 License
 
 MIT
 
-## 🤝 Contributing
-
-Feel free to submit issues and enhancement requests!
-
 ---
 
-Built with ❤️ using React + Vite
-# social-toolkit
+**Built with ❤️ using React + TypeScript + Vite + SCSS**
+
+For issues or questions, check documentation files or create an issue on GitHub.

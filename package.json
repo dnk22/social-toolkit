@@ -4,8 +4,12 @@
   "description": "Chrome extension built with React for social media toolkit",
   "type": "module",
   "scripts": {
-    "dev": "vite build --watch --mode development",
-    "build": "vite build",
+    "dev": "./dev.sh",
+    "watch:main": "vite build --watch --mode development",
+    "watch:content": "node build-content.js --watch",
+    "build": "npm run build:main && npm run build:content",
+    "build:main": "vite build",
+    "build:content": "node build-content.js",
     "preview": "vite preview",
     "load": "echo '\n✅ Extension built! Load it in Chrome:\n1. Open chrome://extensions/\n2. Enable Developer Mode\n3. Click Load unpacked\n4. Select the dist/ folder\n'"
   },

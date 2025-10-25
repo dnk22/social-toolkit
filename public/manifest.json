@@ -21,8 +21,12 @@
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["content.js"]
+      "matches": ["*://www.instagram.com/*"],
+      "js": ["instagram.js"]
+    },
+    {
+      "matches": ["*://www.facebook.com/*"],
+      "js": ["facebook.js"]
     }
   ],
   "permissions": [
