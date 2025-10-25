@@ -1,69 +1,75 @@
 import { REELS_CONSTANTS } from "./types";
+import { notification } from "../../../../utils/notification";
 
 /**
  * Video download functionality
  */
-
-async function findVideoUrlFromScript() {
+async function findVideoUrlFromScript(): Promise<string | null> {
   const scripts = Array.from(document.scripts);
   for (const s of scripts) {
     const text = s.textContent;
     if (text && text.includes("video_versions")) {
       const match = text.match(/"url":"(https:[^"]+\.mp4[^"]*)"/);
       if (match && match[1]) {
-        return decodeURIComponent(match[1]);
+        return decodeURI(match[1].replace(/\\/g, ""));
       }
     }
   }
+
   return null;
 }
 
 export async function downloadVideo(video: HTMLVideoElement): Promise<void> {
   try {
-    // 1️⃣ Tìm URL video gốc
-    const videoUrl = await findVideoUrlFromScript() || video.src || video.currentSrc;
+    // 1️⃣ Tìm URL video gốc từ nhiều nguồn
+    let videoUrl = await findVideoUrlFromScript();
+    console.log(videoUrl, "videoUrl");
 
     if (!videoUrl) {
-      console.error("❌ Không tìm thấy video URL.");
+      // Fallback đến video element
+      videoUrl = video.currentSrc || video.src;
+    }
+
+    if (!videoUrl) {
+      notification.error("Không tìm thấy video URL", "Lỗi Download");
       return;
     }
+    // 3️⃣ Xử lý HTTPS URLs (Instagram CDN)
+    if (videoUrl.startsWith("https://")) {
+      try {
+        // Thử fetch trực tiếp
+        const response = await fetch(videoUrl, {
+          mode: "cors",
+          referrer: "https://www.instagram.com/",
+          headers: {
+            "User-Agent": navigator.userAgent,
+            Referer: "https://www.instagram.com/",
+          },
+        });
 
-    // 2️⃣ Kiểm tra URL hợp lệ (Instagram thường có token dạng ?_nc_ht=...)
-    if (!videoUrl.startsWith("https://scontent")) {
-      console.warn("⚠️ Video URL có thể không hợp lệ:", videoUrl);
-    }
+        if (!response.ok) {
+          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+        }
 
-    // 3️⃣ Fetch blob để bypass lỗi signature mismatch
-    const response = await fetch(videoUrl, { mode: "cors" });
-    if (!response.ok) throw new Error("Fetch video thất bại");
+        const blob = await response.blob();
+        const blobUrl = URL.createObjectURL(blob);
 
-    const blob = await response.blob();
-    const blobUrl = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.href = blobUrl;
+        link.download = `instagram-reel-${Date.now()}.mp4`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(blobUrl);
 
-    // 4️⃣ Tạo link tải
-    const link = document.createElement("a");
-    link.href = blobUrl;
-    link.download = `instagram-reel-${Date.now()}.mp4`;
-    document.body.appendChild(link);
-    link.click();
-    document.body.removeChild(link);
-
-    URL.revokeObjectURL(blobUrl);
-    console.log("✅ Video đã được tải thành công.");
-
-  } catch (error) {
-    console.error("❌ Lỗi tải video:", error);
-
-    // Fallback: mở video trong tab mới
-    try {
-      const fallbackSrc = video.src || video.currentSrc;
-      if (fallbackSrc) {
-        window.open(fallbackSrc, "_blank");
-        console.log("🔗 Video được mở trong tab mới (fallback)");
+        notification.success("Video đã được tải xuống!", "Thành công");
+        return;
+      } catch (httpsError) {
+        notification.error(`Lỗi tải: ${httpsError}`, "Tải HTTPS thất bại");
       }
-    } catch (fallbackError) {
-      console.error("❌ Fallback cũng lỗi:", fallbackError);
     }
+  } catch (error) {
+    notification.error(`${error}`, "Lỗi Download");
   }
 }
 /**
