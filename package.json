@@ -4,7 +4,7 @@
   "description": "Chrome extension built with React for social media toolkit",
   "type": "module",
   "scripts": {
-    "dev": "./dev.sh",
+    "dev": "vite build --watch --mode development",
     "watch:main": "vite build --watch --mode development",
     "watch:content": "node build-content.js --watch",
     "build": "npm run build:main && npm run build:content",
